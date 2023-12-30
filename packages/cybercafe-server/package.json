@@ -1,0 +1,24 @@
+{
+  "name": "@repo/cybercafe-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint ./src --max-warnings 0",
+    "build": "tsup src/index.ts --format cjs,esm --dts"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@turbo/gen": "^1.10.12",
+    "@types/eslint": "^8.44.7",
+    "@types/node": "^20.5.2",
+    "@types/uuid": "^9.0.7",
+    "eslint": "^8.53.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "socket.io": "^4.7.2",
+    "uuid": "^9.0.1"
+  }
+}
