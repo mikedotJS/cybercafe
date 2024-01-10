@@ -21,6 +21,10 @@ export class CybercafeServer {
       socket.on("joinOrCreateRoom", (roomType: string) =>
         this.joinOrCreateRoom(roomType, socket.id)
       );
+
+      socket.on("joinRoomById", (roomId: string) => {
+        this.joinRoom(roomId, socket.id);
+      });
     });
   }
 
@@ -57,17 +61,17 @@ export class CybercafeServer {
     return roomId;
   }
 
-  joinRoom(roomId: string, playerId: string): void {
+  joinRoom(roomId: string, clientId: string): void {
     const room = this.rooms[roomId];
     if (room) {
-      room.addClient(playerId);
-      this.io.to(playerId).emit("joinedRoom", room);
+      room.addClient(clientId);
+      this.io.to(clientId).emit("joinedRoom", room);
     }
   }
 
-  leaveRoom(roomId: string, playerId: string) {
+  leaveRoom(roomId: string, clientId: string) {
     const room = this.rooms[roomId];
-    room?.removeClient(playerId);
+    room?.removeClient(clientId);
   }
 
   moveClientToRoom(

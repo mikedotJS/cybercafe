@@ -3,6 +3,6 @@
   "compilerOptions": {
     "outDir": "dist"
   },
-  "include": ["src", "turbo", ".eslintrc.js"],
+  "include": ["src", ".eslintrc.js"],
   "exclude": ["node_modules", "dist"]
 }

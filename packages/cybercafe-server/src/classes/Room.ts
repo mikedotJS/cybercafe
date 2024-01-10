@@ -10,13 +10,15 @@ export class Room<TState = unknown> extends EventEmitter {
   type: string;
   clients: string[];
   state: TState;
+  config: Record<string, unknown>;
 
-  constructor(id: string, type: string, config: any) {
+  constructor(id: string, type: string, config: Record<string, unknown>) {
     super();
     this.id = id;
     this.type = type;
     this.clients = [];
-    this.state = { ...config };
+    this.state = {} as TState;
+    this.config = { ...config };
   }
 
   addClient(clientId: string) {
