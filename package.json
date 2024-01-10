@@ -1,6 +1,5 @@
 {
   "name": "cybercafe",
-  "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -9,8 +8,8 @@
     "publish-packages": "turbo run build lint && changeset version && changeset publish"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@weirdscience/eslint-config": "*",
+    "@weirdscience/typescript-config": "*",
     "prettier": "^3.1.0",
     "turbo": "latest"
   },
@@ -24,5 +23,8 @@
   "dependencies": {
     "@changesets/cli": "^2.27.1",
     "socket.io-client": "^4.7.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

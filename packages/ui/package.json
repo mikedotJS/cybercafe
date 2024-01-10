@@ -1,6 +1,6 @@
 {
-  "name": "@repo/ui",
-  "version": "1.0.0",
+  "name": "@weirdscience/ui",
+  "version": "1.1.0",
   "private": true,
   "exports": {
     "./button": "./src/button.tsx",
@@ -12,8 +12,8 @@
     "generate:component": "turbo gen react-component"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@weirdscience/eslint-config": "*",
+    "@weirdscience/typescript-config": "*",
     "@turbo/gen": "^1.10.12",
     "@types/node": "^20.5.2",
     "@types/eslint": "^8.44.7",

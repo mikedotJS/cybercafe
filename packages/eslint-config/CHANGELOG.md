@@ -1,4 +1,10 @@
-# @repo/eslint-config
+# @weirdscience/eslint-config
+
+## 1.1.0
+
+### Minor Changes
+
+- Fix config
 
 ## 1.0.0
 

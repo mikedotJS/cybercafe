@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/packages.json",
+  "extends": "@weirdscience/typescript-config/packages.json",
   "compilerOptions": {
     "outDir": "dist"
   },

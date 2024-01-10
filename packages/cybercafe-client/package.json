@@ -1,14 +1,13 @@
 {
-  "name": "@repo/cybercafe-client",
-  "version": "1.0.0",
-  "private": true,
+  "name": "@weirdscience/cybercafe-client",
+  "version": "1.1.0",
   "scripts": {
     "lint": "eslint ./src --max-warnings 0",
     "build": "tsup src/index.ts --format cjs,esm --dts"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@weirdscience/eslint-config": "*",
+    "@weirdscience/typescript-config": "*",
     "@turbo/gen": "^1.10.12",
     "@types/eslint": "^8.44.7",
     "@types/node": "^20.5.2",
@@ -23,5 +22,8 @@
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  }
 }

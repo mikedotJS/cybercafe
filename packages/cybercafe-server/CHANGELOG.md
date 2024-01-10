@@ -1,4 +1,10 @@
-# @repo/cybercafe-server
+# @weirdscience/cybercafe-server
+
+## 1.1.0
+
+### Minor Changes
+
+- Fix config
 
 ## 1.0.0
 

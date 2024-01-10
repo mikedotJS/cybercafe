@@ -1,4 +1,10 @@
-# @repo/typescript-config
+# @weirdscience/typescript-config
+
+## 1.1.0
+
+### Minor Changes
+
+- Fix config
 
 ## 1.0.0
 

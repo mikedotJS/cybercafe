@@ -1,4 +1,10 @@
-# @repo/cybercafe-client
+# @weirdscience/cybercafe-client
+
+## 1.1.0
+
+### Minor Changes
+
+- Fix config
 
 ## 1.0.0
 
