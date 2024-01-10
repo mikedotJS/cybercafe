@@ -1,6 +1,6 @@
 import EventEmitter from "events";
 
-interface RoomStateUpdateEvent<TState> {
+export interface RoomStateUpdateEvent<TState> {
   roomId: string;
   newState: TState;
 }

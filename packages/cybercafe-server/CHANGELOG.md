@@ -1,5 +1,11 @@
 # @weirdscience/cybercafe-server
 
+## 1.1.1
+
+### Patch Changes
+
+- Change classes exports
+
 ## 1.1.0
 
 ### Minor Changes
