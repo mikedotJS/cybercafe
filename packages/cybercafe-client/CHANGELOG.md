@@ -1,5 +1,11 @@
 # @weirdscience/cybercafe-client
 
+## 1.2.3
+
+### Patch Changes
+
+- Update client socket to public
+
 ## 1.2.2
 
 ### Patch Changes

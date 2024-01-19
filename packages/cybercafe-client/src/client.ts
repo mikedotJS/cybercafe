@@ -6,7 +6,7 @@ import { Socket, io } from "socket.io-client";
 export class Client {
   private serverUrl: string;
   private currentNamespace: string;
-  private socket: Socket | null;
+  public socket: Socket | null;
 
   /**
    * Initializes a new instance of the Client class.
