@@ -1,5 +1,11 @@
 # @weirdscience/cybercafe-server
 
+## 1.2.3
+
+### Patch Changes
+
+- Update room clients to public
+
 ## 1.2.2
 
 ### Patch Changes

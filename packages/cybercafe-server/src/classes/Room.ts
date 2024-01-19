@@ -7,7 +7,7 @@ import { CyberCafeServer } from "./Server";
 export class Room {
   private io: Server;
   private namespace: ReturnType<Server["of"]>;
-  private users: Map<string, Socket>;
+  public users: Map<string, Socket>;
   private state: Record<string, unknown>;
   private server: CyberCafeServer<string>;
 
