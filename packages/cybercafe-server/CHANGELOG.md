@@ -1,5 +1,11 @@
 # @weirdscience/cybercafe-server
 
+## 1.2.2
+
+### Patch Changes
+
+- Fix README.md files
+
 ## 1.2.1
 
 ### Patch Changes

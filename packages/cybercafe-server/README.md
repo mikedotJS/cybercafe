@@ -10,74 +10,74 @@ Cybercafe-server is a foundational library for creating and managing virtual roo
 
 ## Installation
 
-\`\`\`bash
+```bash
 npm install @weirdscience/cybercafe-server
-\`\`\`
+```
 
 ## Usage
 
 To get started with cybercafe-server, you need to import the CyberCafeServer and Room classes.
 
-\`\`\`typescript
-import { CyberCafeServer, Room } from '@weirdscience/cybercafe-server';
-\`\`\`
+```typescript
+import { CyberCafeServer, Room } from "@weirdscience/cybercafe-server";
+```
 
 Create an instance of CyberCafeServer:
 
-\`\`\`typescript
+```typescript
 const server = new CyberCafeServer<string>();
-\`\`\`
+```
 
 Define a new room type:
 
-\`\`\`typescript
+```typescript
 server.defineRoomType({
-type: "chat",
-constructor: Room // Replace with your custom room class if needed
+  type: "chat",
+  constructor: Room, // Replace with your custom room class if needed
 });
-\`\`\`
+```
 
 Create a new room:
 
-\`\`\`typescript
+```typescript
 const chatRoom = server.createRoom("chat", "room1");
-\`\`\`
+```
 
 Retrieve a room by its ID:
 
-\`\`\`typescript
+```typescript
 const room = server.getRoom("room1");
-\`\`\`
+```
 
 Remove a room by its ID:
 
-\`\`\`typescript
+```typescript
 server.removeRoom("room1");
-\`\`\`
+```
 
 ## Testing
 
 Run the test suite using the following command:
 
-\`\`\`bash
+```bash
 npm test
-\`\`\`
+```
 
 ## Building
 
 Build the package with:
 
-\`\`\`bash
+```bash
 npm run build
-\`\`\`
+```
 
 ## Linting
 
 Lint the codebase with:
 
-\`\`\`bash
+```bash
 npm run lint
-\`\`\`
+```
 
 ## Changelog
 

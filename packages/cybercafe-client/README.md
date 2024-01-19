@@ -10,65 +10,65 @@ Cybercafe-client is a library designed to connect and interact with the cybercaf
 
 ## Installation
 
-\`\`\`bash
+```bash
 npm install @weirdscience/cybercafe-client
-\`\`\`
+```
 
 ## Usage
 
 To get started with cybercafe-client, you need to import the CybercafeClient class.
 
-\`\`\`typescript
-import { CybercafeClient } from '@weirdscience/cybercafe-client';
-\`\`\`
+```typescript
+import { CybercafeClient } from "@weirdscience/cybercafe-client";
+```
 
 Create an instance of CybercafeClient:
 
-\`\`\`typescript
-const client = new CybercafeClient('http://localhost:3000');
-\`\`\`
+```typescript
+const client = new CybercafeClient("http://localhost:3000");
+```
 
 Connect to a room namespace:
 
-\`\`\`typescript
-client.connect('chat');
-\`\`\`
+```typescript
+client.connect("chat");
+```
 
 Listen for events:
 
-\`\`\`typescript
-client.on('message', (data) => {
-console.log('Received message:', data);
+```typescript
+client.on("message", (data) => {
+  console.log("Received message:", data);
 });
-\`\`\`
+```
 
 Send an event:
 
-\`\`\`typescript
-client.emit('message', { text: 'Hello, world!' });
-\`\`\`
+```typescript
+client.emit("message", { text: "Hello, world!" });
+```
 
 Disconnect from the server:
 
-\`\`\`typescript
+```typescript
 client.disconnect();
-\`\`\`
+```
 
 ## Building
 
 Build the package with:
 
-\`\`\`bash
+```bash
 npm run build
-\`\`\`
+```
 
 ## Linting
 
 Lint the codebase with:
 
-\`\`\`bash
+```bash
 npm run lint
-\`\`\`
+```
 
 ## Changelog
 
