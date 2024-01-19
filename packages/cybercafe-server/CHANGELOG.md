@@ -1,5 +1,17 @@
 # @weirdscience/cybercafe-server
 
+## 1.1.3
+
+### Patch Changes
+
+- Fix Room types
+
+## 1.1.2
+
+### Patch Changes
+
+- Fix Room constructor
+
 ## 1.1.1
 
 ### Patch Changes

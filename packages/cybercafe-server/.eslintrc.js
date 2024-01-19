@@ -6,4 +6,14 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: "./tsconfig.lint.json",
   },
+  overrides: [
+    // ... existing overrides
+    {
+      files: ["**/*.test.ts"],
+      env: {
+        jest: true, // or another test environment if you're not using Jest
+      },
+      // Add any test-specific rules or plugins here
+    },
+  ],
 };

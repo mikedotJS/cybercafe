@@ -1,2 +1,2 @@
 export { Room } from "./Room";
-export { CybercafeServer } from "./Server";
+export { CyberCafeServer } from "./Server";

@@ -1,40 +1,101 @@
-import EventEmitter from "events";
+import { Server, Socket } from "socket.io";
+import { CyberCafeServer } from "./Server";
 
-export interface RoomStateUpdateEvent<TState> {
-  roomId: string;
-  newState: TState;
-}
+/**
+ * Represents a room in the cybercafe server.
+ */
+export class Room {
+  private io: Server;
+  private namespace: ReturnType<Server["of"]>;
+  private users: Map<string, Socket>;
+  private state: Record<string, unknown>;
+  private server: CyberCafeServer<string>;
 
-export class Room<TState = unknown> extends EventEmitter {
-  id: string;
-  type: string;
-  clients: string[];
-  state: TState;
-  config: Record<string, unknown>;
+  /**
+   * Initializes a new instance of the Room class.
+   * @param namespace The namespace identifier for the room.
+   */
+  constructor(namespace: string, server: CyberCafeServer<string>) {
+    this.io = new Server();
+    this.namespace = this.io.of(namespace);
+    this.state = {};
+    this.server = server;
 
-  constructor(id: string, type: string, config: Record<string, unknown>) {
-    super();
-    this.id = id;
-    this.type = type;
-    this.clients = [];
-    this.state = {} as TState;
-    this.config = { ...config };
+    this.users = new Map();
+
+    this.onCreate();
+
+    this.namespace.on("connection", (socket) => {
+      socket.emit("stateUpdate", this.state);
+      this.onJoin();
+    });
   }
 
-  addClient(clientId: string) {
-    this.clients.push(clientId);
+  /**
+   * Updates the room state with the provided state object.
+   * @param update A partial state object with properties to update.
+   */
+  updateState(update: Record<string, unknown>): void {
+    this.state = { ...this.state, ...update };
+    this.namespace.emit("stateUpdate", this.state);
   }
 
-  removeClient(clientId: string) {
-    this.clients = this.clients.filter((cid) => cid !== clientId);
+  /**
+   * Registers an event handler for a specific event.
+   * @param event The name of the event to listen for.
+   * @param handler The function to call when the event is emitted.
+   */
+  public on(
+    event: string,
+    handler: (socket: Socket, data: unknown) => void
+  ): void {
+    this.namespace.on(event, (socket: Socket, ...args: unknown[]) => {
+      if (args.length === 1) {
+        handler(socket, args[0]);
+      } else {
+        handler(socket, args);
+      }
+    });
   }
 
-  updateState(updateFn: (currentState: TState) => TState): void {
-    this.state = updateFn(this.state);
+  /**
+   * Called when the room is created. Can be overridden by subclasses.
+   */
+  protected onCreate() {}
 
-    this.emit("stateUpdated", {
-      roomId: this.id,
-      newState: this.state,
-    } as RoomStateUpdateEvent<TState>);
+  /**
+   * Called when a user joins the room. Can be overridden by subclasses.
+   */
+  protected onJoin() {}
+
+  /**
+   * Adds a user to the room.
+   * @param userId The unique identifier for the user.
+   * @param socket The socket instance for the user.
+   */
+  public addUser(userId: string, socket: Socket): void {
+    this.users.set(userId, socket);
+    socket.join(this.namespace.name);
+  }
+
+  /**
+   * Removes a user from the room.
+   * @param userId The unique identifier for the user to remove.
+   */
+  public removeUser(userId: string): void {
+    const user = this.users.get(userId);
+    if (user) {
+      user.leave(this.namespace.name);
+      this.users.delete(userId);
+    }
+  }
+
+  /**
+   * Broadcasts an event to all users in the room.
+   * @param event The name of the event to broadcast.
+   * @param data The data to send with the event.
+   */
+  public broadcast(event: string, data: unknown): void {
+    this.namespace.emit(event, data);
   }
 }

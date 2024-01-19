@@ -1,1 +1,1 @@
-export { Room, CybercafeServer } from "./classes";
+export { Room, CyberCafeServer } from "./classes";

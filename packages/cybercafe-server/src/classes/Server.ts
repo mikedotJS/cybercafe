@@ -1,104 +1,88 @@
-import * as http from "http";
-import { Server } from "socket.io";
 import { Room } from "./Room";
-import { v4 as uuidv4 } from "uuid";
 
-type RoomConstructor = new (
-  roomId: string,
-  roomType: string,
-  config: object
+/**
+ * Type alias for a constructor of a Room.
+ * @template T The constructor parameters type.
+ */
+type RoomConstructor<T extends unknown[] = unknown[]> = new (
+  ...args: T
 ) => Room;
 
-export class CybercafeServer {
-  private io: Server;
-  private rooms: { [id: string]: Room } = {};
-  private roomTypes: { [type: string]: RoomConstructor } = {};
+/**
+ * Type for room registration, holding the room type and its constructor.
+ * @template RT The room type.
+ * @template T The constructor parameters type.
+ */
+type RoomRegistration<RT, T extends unknown[] = unknown[]> = {
+  type: RT;
+  constructor: RoomConstructor<T>;
+};
 
-  constructor(server: http.Server) {
-    this.io = new Server(server);
+/**
+ * Represents a server with the ability to manage different types of rooms.
+ * @template RT The room type.
+ */
+export class CyberCafeServer<RT> {
+  private rooms: Map<string, Room>;
+  private roomConstructors: Map<RT, RoomConstructor>;
 
-    this.io.on("connection", (socket) => {
-      socket.on("leaveRoom", (roomId: string) =>
-        this.leaveRoom(roomId, socket.id)
-      );
-
-      socket.on("joinOrCreateRoom", (roomType: string) =>
-        this.joinOrCreateRoom(roomType, socket.id)
-      );
-
-      socket.on("joinRoomById", (roomId: string) => {
-        this.joinRoom(roomId, socket.id);
-      });
-    });
+  /**
+   * Initializes a new instance of the CyberCafeServer class.
+   */
+  constructor() {
+    this.rooms = new Map();
+    this.roomConstructors = new Map();
   }
 
-  joinOrCreateRoom(roomType: string, clientId: string): void {
-    const existingRoomId = Object.keys(this.rooms).find(
-      (roomId) => this.rooms[roomId]?.type === roomType
-    );
-
-    if (existingRoomId) {
-      this.joinRoom(existingRoomId, clientId);
-    } else {
-      const newRoomId = this.createRoom(roomType, {});
-      this.joinRoom(newRoomId, clientId);
-    }
-  }
-
-  define(type: string, constructor: RoomConstructor): void {
-    this.roomTypes[type] = constructor;
-  }
-
-  createRoom(roomType: string, config: object): string {
-    const roomId = this.generateRoomId();
-    const RoomTypeConstructor = this.roomTypes[roomType];
-    if (!RoomTypeConstructor) {
-      throw new Error(`Room type ${roomType} is not defined.`);
-    }
-    const room = new RoomTypeConstructor(roomId, roomType, config);
-
-    room.on("stateUpdated", (event) => {
-      this.io.to(event.roomId).emit("stateUpdated", event.newState);
-    });
-
-    this.rooms[roomId] = room;
-    return roomId;
-  }
-
-  joinRoom(roomId: string, clientId: string): void {
-    const room = this.rooms[roomId];
-    if (room) {
-      room.addClient(clientId);
-      this.io.to(clientId).emit("joinedRoom", room);
-    }
-  }
-
-  leaveRoom(roomId: string, clientId: string) {
-    const room = this.rooms[roomId];
-    room?.removeClient(clientId);
-  }
-
-  moveClientToRoom(
-    clientId: string,
-    fromRoomId: string,
-    toRoomId: string
+  /**
+   * Defines a new room type and its associated constructor.
+   * @param registration The room registration object containing the room type and constructor.
+   */
+  defineRoomType<T extends unknown[]>(
+    registration: RoomRegistration<RT, T>
   ): void {
-    const fromRoom = this.rooms[fromRoomId];
-    const toRoom = this.rooms[toRoomId];
-
-    if (!fromRoom) {
-      throw new Error(`Room with ID ${fromRoomId} does not exist.`);
-    }
-
-    if (!toRoom) {
-      throw new Error(`Room with ID ${toRoomId} does not exist.`);
-    }
-
-    fromRoom.removeClient(clientId);
-    toRoom.addClient(clientId);
+    this.roomConstructors.set(
+      registration.type,
+      registration.constructor as RoomConstructor
+    );
   }
 
-  private generateRoomId(): string {
-    return "room_" + uuidv4();
+  /**
+   * Creates a new room of the specified type.
+   * @param roomType The type of the room to create.
+   * @param args The constructor arguments for the room.
+   * @returns The newly created room instance.
+   * @throws When the room type is unrecognized or the room ID is undefined.
+   */
+  createRoom<T extends string[]>(roomType: RT, ...args: T): Room {
+    const Constructor = this.roomConstructors.get(roomType);
+    if (Constructor) {
+      const room = new Constructor(...args, this);
+      const roomId = args[0];
+      if (roomId === undefined) {
+        throw new Error("Room ID cannot be undefined");
+      }
+      this.rooms.set(roomId, room);
+      return room;
+    } else {
+      throw new Error("Unrecognized room type");
+    }
+  }
+
+  /**
+   * Retrieves a room by its ID.
+   * @param roomId The ID of the room to retrieve.
+   * @returns The room instance if found, otherwise undefined.
+   */
+  getRoom(roomId: string): Room | undefined {
+    return this.rooms.get(roomId);
+  }
+
+  /**
+   * Removes a room from the server by its ID.
+   * @param roomId The ID of the room to remove.
+   */
+  removeRoom(roomId: string): void {
+    this.rooms.delete(roomId);
   }
 }
