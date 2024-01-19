@@ -1,5 +1,11 @@
 # @weirdscience/cybercafe-client
 
+## 1.2.1
+
+### Patch Changes
+
+- Add client and server README.md files
+
 ## 1.2.0
 
 ### Minor Changes

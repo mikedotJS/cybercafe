@@ -1,6 +1,6 @@
 {
   "name": "@weirdscience/cybercafe-client",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "scripts": {
     "lint": "eslint ./src --max-warnings 0",
     "build": "tsup src/index.ts --format cjs,esm --dts"
