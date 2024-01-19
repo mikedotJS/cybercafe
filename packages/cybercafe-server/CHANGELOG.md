@@ -1,5 +1,11 @@
 # @weirdscience/cybercafe-server
 
+## 1.2.0
+
+### Minor Changes
+
+- Refactored all classes
+
 ## 1.1.3
 
 ### Patch Changes
