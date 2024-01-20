@@ -1,3 +1,4 @@
+import { Server } from "socket.io";
 import { Room } from "./Room";
 
 /**
@@ -23,13 +24,15 @@ type RoomRegistration<RT, T extends unknown[] = unknown[]> = {
  * @template RT The room type.
  */
 export class CyberCafeServer<RT> {
+  public io: Server;
   private rooms: Map<string, Room>;
   private roomConstructors: Map<RT, RoomConstructor>;
 
   /**
    * Initializes a new instance of the CyberCafeServer class.
    */
-  constructor() {
+  constructor(io: Server) {
+    this.io = io;
     this.rooms = new Map();
     this.roomConstructors = new Map();
   }

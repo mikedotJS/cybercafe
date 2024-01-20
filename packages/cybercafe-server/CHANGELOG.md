@@ -1,5 +1,35 @@
 # @weirdscience/cybercafe-server
 
+## 1.2.8
+
+### Patch Changes
+
+- Fix on method
+
+## 1.2.7
+
+### Patch Changes
+
+- Fix on method
+
+## 1.2.6
+
+### Patch Changes
+
+- Fix on method
+
+## 1.2.5
+
+### Patch Changes
+
+- Fix Room on method
+
+## 1.2.4
+
+### Patch Changes
+
+- Refactor CyberCafeServer constructor
+
 ## 1.2.3
 
 ### Patch Changes

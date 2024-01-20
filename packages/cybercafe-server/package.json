@@ -1,6 +1,6 @@
 {
   "name": "@weirdscience/cybercafe-server",
-  "version": "1.2.3",
+  "version": "1.2.8",
   "scripts": {
     "test": "jest",
     "lint": "eslint ./src --max-warnings 0",

@@ -61,9 +61,7 @@ export class Client {
    * @param data The data to send with the event.
    */
   emit(event: string, data: unknown): void {
-    if (this.socket) {
-      this.socket.emit(event, data);
-    }
+    this.socket?.emit(event, data);
   }
 
   /**
@@ -72,9 +70,7 @@ export class Client {
    * @param handler The function to call when the event occurs.
    */
   on(event: string, handler: (data: unknown) => void): void {
-    if (this.socket) {
-      this.socket.on(event, handler);
-    }
+    this.socket?.on(event, handler);
   }
 
   /**

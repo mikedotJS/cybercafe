@@ -2,38 +2,39 @@ import { Server, Socket } from "socket.io";
 import { CyberCafeServer } from "./Server";
 
 /**
- * Represents a room in the cybercafe server.
+ * Represents a room within the CyberCafe server environment.
+ * This class provides the functionality to manage users and room state.
  */
 export class Room {
-  private io: Server;
   private namespace: ReturnType<Server["of"]>;
   public users: Map<string, Socket>;
   private state: Record<string, unknown>;
   private server: CyberCafeServer<string>;
 
   /**
-   * Initializes a new instance of the Room class.
+   * Constructs a new Room instance.
    * @param namespace The namespace identifier for the room.
+   * @param server The instance of the CyberCafeServer that this room belongs to.
    */
   constructor(namespace: string, server: CyberCafeServer<string>) {
-    this.io = new Server();
-    this.namespace = this.io.of(namespace);
     this.state = {};
     this.server = server;
+    this.namespace = this.server.io.of(namespace);
 
     this.users = new Map();
 
     this.onCreate();
 
     this.namespace.on("connection", (socket) => {
-      socket.emit("stateUpdate", this.state);
+      this.onMessage(socket);
       this.onJoin();
+      socket.emit("stateUpdate", this.state);
     });
   }
 
   /**
-   * Updates the room state with the provided state object.
-   * @param update A partial state object with properties to update.
+   * Merges the provided state object with the current room state and broadcasts the updated state to all users.
+   * @param update A partial state object with properties to merge into the current state.
    */
   updateState(update: Record<string, unknown>): void {
     this.state = { ...this.state, ...update };
@@ -41,37 +42,26 @@ export class Room {
   }
 
   /**
-   * Registers an event handler for a specific event.
-   * @param event The name of the event to listen for.
-   * @param handler The function to call when the event is emitted.
-   */
-  public on(
-    event: string,
-    handler: (socket: Socket, data: unknown) => void
-  ): void {
-    this.namespace.on(event, (socket: Socket, ...args: unknown[]) => {
-      if (args.length === 1) {
-        handler(socket, args[0]);
-      } else {
-        handler(socket, args);
-      }
-    });
-  }
-
-  /**
-   * Called when the room is created. Can be overridden by subclasses.
+   * Lifecycle hook that is called immediately after the room is created.
+   * This method can be overridden by subclasses to perform custom initialization.
    */
   protected onCreate() {}
 
   /**
-   * Called when a user joins the room. Can be overridden by subclasses.
+   * Lifecycle hook that is called when a user joins the room.
+   * This method can be overridden by subclasses to handle user joining events.
    */
   protected onJoin() {}
 
+  protected onMessage(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    socket: Socket
+  ) {}
+
   /**
-   * Adds a user to the room.
+   * Adds a user to the room and associates them with a socket connection.
    * @param userId The unique identifier for the user.
-   * @param socket The socket instance for the user.
+   * @param socket The socket instance associated with the user.
    */
   public addUser(userId: string, socket: Socket): void {
     this.users.set(userId, socket);
@@ -79,7 +69,7 @@ export class Room {
   }
 
   /**
-   * Removes a user from the room.
+   * Removes a user from the room based on their unique identifier.
    * @param userId The unique identifier for the user to remove.
    */
   public removeUser(userId: string): void {
@@ -91,9 +81,9 @@ export class Room {
   }
 
   /**
-   * Broadcasts an event to all users in the room.
+   * Sends an event with associated data to all users in the room.
    * @param event The name of the event to broadcast.
-   * @param data The data to send with the event.
+   * @param data The data to be sent with the event.
    */
   public broadcast(event: string, data: unknown): void {
     this.namespace.emit(event, data);
